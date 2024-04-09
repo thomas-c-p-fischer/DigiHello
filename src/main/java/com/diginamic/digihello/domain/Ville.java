@@ -3,12 +3,26 @@ package com.diginamic.digihello.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Ville {
+
+    private static Long idCounter = 1L;
+
+    private Long id;
+
     private String nom;
     private int nbHabitants;
 
     public Ville(String nom, int nbHabitants) {
         this.nom = nom;
         this.nbHabitants = nbHabitants;
+        this.id = idCounter++;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @JsonProperty("nom")
