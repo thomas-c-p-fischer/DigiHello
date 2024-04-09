@@ -1,9 +1,10 @@
 package com.diginamic.digihello.webRest;
 
 import com.diginamic.digihello.domain.Ville;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +13,24 @@ import java.util.List;
 @RequestMapping("/villes")
 public class VilleResource {
 
+    ArrayList<Ville> villes = new ArrayList<Ville>();
+
+    @PostMapping
+    public ResponseEntity<String> insertVille(@RequestBody Ville newVille) {
+        for (Ville v : villes) {
+            if(newVille.getNom().equals(v.getNom())) {
+                return ResponseEntity.badRequest().body("Une ville avec ce nom est déjà présente");
+            }
+        }
+        villes.add(newVille);
+        return ResponseEntity.ok("La ville a bien été ajoutée.");
+    }
+
     @GetMapping
     public List<Ville> getVilles() {
-        return new ArrayList<>(Arrays.asList(new Ville("Paris", 2200000), new Ville("New York", 8600000), new Ville("Tokyo", 13960000)));
+        villes.add(new Ville("Paris", 2200000));
+        villes.add(new Ville("New York", 8600000));
+        villes.add(new Ville("Tokyo", 13960000));
+        return new ArrayList<>(villes);
     }
 }
