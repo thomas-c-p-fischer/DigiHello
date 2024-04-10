@@ -1,20 +1,30 @@
 package com.diginamic.digihello.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 
+@Entity
 public class Ville {
 
-    private static Long idCounter = 1L;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nom;
     private int nbHabitants;
 
-    public Ville(String nom, int nbHabitants) {
+    @ManyToOne
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
+
+    public Ville(String nom, int nbHabitants, Departement departement) {
         this.nom = nom;
         this.nbHabitants = nbHabitants;
-        this.id = idCounter++;
+        this.departement = departement;
+    }
+
+    public Ville() {
+
     }
 
     public Long getId() {
@@ -41,5 +51,13 @@ public class Ville {
 
     public void setNbHabitants(int nbHabitants) {
         this.nbHabitants = nbHabitants;
+    }
+
+    public Departement getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(Departement departement) {
+        this.departement = departement;
     }
 }
