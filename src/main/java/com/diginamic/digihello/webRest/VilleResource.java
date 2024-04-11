@@ -1,13 +1,14 @@
 package com.diginamic.digihello.webRest;
 
-import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
 import com.diginamic.digihello.exceptions.GestionExceptions;
 import com.diginamic.digihello.service.VilleService;
+import com.diginamic.digihello.service.dto.VilleDto;
+import com.diginamic.digihello.service.mapper.VilleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
@@ -121,9 +122,12 @@ public class VilleResource {
     }*/
 
     //-------------------------------- TP - 7 --------------------------------
+   @Autowired
+   private VilleMapper villeMapper;
 
     @PostMapping
-    public ResponseEntity<String> createVille(@RequestBody Ville ville) throws GestionExceptions {
+    public ResponseEntity<String> createVille(@RequestBody VilleDto villeDto) throws GestionExceptions {
+        Ville ville = villeMapper.toBean(villeDto);
         villeService.insertVille(ville);
         return ResponseEntity.ok("La ville a bien été créée !");
     }

@@ -61,9 +61,6 @@ public class VilleService {
     @Autowired
     private VilleRepository villeRepository;
 
-    @Autowired
-    private DepartementRepository departementRepository;
-
     @PostConstruct
     public void init() {
         villeRepository.save(new Ville("Paris",2133111, new Departement("Paris","75")));

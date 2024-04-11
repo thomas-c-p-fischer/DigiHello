@@ -1,7 +1,7 @@
-package com.diginamic.digihello.domain.mapper;
+package com.diginamic.digihello.service.mapper;
 
 import com.diginamic.digihello.domain.Departement;
-import com.diginamic.digihello.domain.dto.DepartementDto;
+import com.diginamic.digihello.service.dto.DepartementDto;
 
 public class DepartementMapper {
 

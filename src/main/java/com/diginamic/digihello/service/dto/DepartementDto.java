@@ -1,4 +1,4 @@
-package com.diginamic.digihello.domain.dto;
+package com.diginamic.digihello.service.dto;
 
 public class DepartementDto {
     private String code;
