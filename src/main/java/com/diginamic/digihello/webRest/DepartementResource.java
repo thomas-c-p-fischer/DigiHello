@@ -4,6 +4,7 @@ import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
 import com.diginamic.digihello.service.DepartementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.List;
 @RequestMapping("/departements")
 public class DepartementResource {
 
-    /*@Autowired
+    @Autowired
     private DepartementService departementService;
 
-    @GetMapping
+    /*@GetMapping
     public List<Departement> getAllDepartements() {
         return departementService.getAllDepartements();
     }
@@ -49,4 +50,45 @@ public class DepartementResource {
     public List<Ville> getCitiesInPopulationRangeOfDepartement(@PathVariable Long id, @RequestParam int minPopulation, @RequestParam int maxPopulation) {
         return departementService.getCitiesInPopulationRangeOfDepartement(id, minPopulation, maxPopulation);
     }*/
+
+    // ------------------------------------------ TP - 8 ------------------------------------------
+
+    @PostMapping
+    public ResponseEntity<String> createDepartement(@RequestBody Departement departement) {
+        boolean result = departementService.insertDepartement(departement);
+        if (!result) {
+            return ResponseEntity.badRequest().body("Ce département n'a pas été créée !");
+        } else {
+            return ResponseEntity.ok("Le département a bien été créée !");
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<String> getVilles() {
+        List<Departement> result = departementService.getAllDepartements();
+        if (result.isEmpty()) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune département !");
+        }
+        return ResponseEntity.ok("Succès !");
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateVille(@RequestBody Departement departement) {
+        boolean departementModifiee = departementService.updateDepartement(departement);
+        if(departementModifiee) {
+            return ResponseEntity.ok("Succès !");
+        } else {
+            return ResponseEntity.badRequest().body("Ce département n'existe pas !");
+        }
+    }
+
+    @DeleteMapping("/{code}")
+    public ResponseEntity<String> deleteDepartement(@PathVariable("code") String code) {
+        boolean departementSupprimee = departementService.supprimerDepartement(code);
+        if(departementSupprimee) {
+            return ResponseEntity.ok("Succès !");
+        } else {
+            return ResponseEntity.badRequest().body("Ce département n'existe pas !");
+        }
+    }
 }

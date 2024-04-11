@@ -1,11 +1,16 @@
 package com.diginamic.digihello.service;
 import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
+import com.diginamic.digihello.repository.DepartementRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartementService {
@@ -65,4 +70,63 @@ public class DepartementService {
                 .setParameter("maxPopulation", maxPopulation)
                 .getResultList();
     }*/
+
+    // ------------------------------------------ TP - 8 ------------------------------------------
+
+    @Autowired
+    private DepartementRepository departementRepository;
+
+    @Transactional
+    public boolean insertDepartement(Departement departement) {
+        Optional<Departement> departementBdd = departementRepository.findByCode(departement.getCode());
+        if(departementBdd.get() == null) {
+            departementRepository.save(departement);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Transactional
+    public List<Departement> getAllDepartements() {
+        Iterable<Departement> departementsIterable = departementRepository.findAll();
+        List<Departement> departements = new ArrayList<>();
+        departementsIterable.forEach(departements::add);
+        if(departements.isEmpty()) {
+            return null;
+        } else {
+            return departements;
+        }
+    }
+
+    @Transactional
+    public Departement getDepartementByCode(String code) {
+        Optional<Departement> departement = departementRepository.findByCode(code);
+        if(departement != null) {
+            return departement.get();
+        } else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public boolean updateDepartement(Departement departement) {
+        Optional<Departement> departementUpdate = departementRepository.findByCode(departement.getCode());
+        if (departementUpdate.get() != null) {
+            departementRepository.save(departement);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public boolean supprimerDepartement(String code) {
+        Optional<Departement> departementDelete = departementRepository.findByCode(code);
+        if (departementDelete.isPresent()) {
+            departementRepository.delete(departementDelete.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
