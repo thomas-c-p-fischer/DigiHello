@@ -1,6 +1,7 @@
 package com.diginamic.digihello.service;
 import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
+import com.diginamic.digihello.exceptions.GestionExceptions;
 import com.diginamic.digihello.repository.DepartementRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -77,13 +78,16 @@ public class DepartementService {
     private DepartementRepository departementRepository;
 
     @Transactional
-    public boolean insertDepartement(Departement departement) {
+    public void insertDepartement(Departement departement) throws GestionExceptions {
         Optional<Departement> departementBdd = departementRepository.findByCode(departement.getCode());
-        if(departementBdd.get() == null) {
+        if (departement.getCode().length() < 2 || departement.getCode().length() > 3) {
+            throw new GestionExceptions("Le code département doit être composé de 2 à 3 caractères");
+        }
+        if (departement.getNom().length() < 3) {
+            throw new GestionExceptions("Le nom du département doit contenir au moins 3 lettres");
+        }
+        if(!departementBdd.isPresent()) {
             departementRepository.save(departement);
-            return true;
-        } else {
-            return false;
         }
     }
 

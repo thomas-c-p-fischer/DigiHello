@@ -2,6 +2,7 @@ package com.diginamic.digihello.webRest;
 
 import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
+import com.diginamic.digihello.exceptions.GestionExceptions;
 import com.diginamic.digihello.service.VilleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -122,13 +123,9 @@ public class VilleResource {
     //-------------------------------- TP - 7 --------------------------------
 
     @PostMapping
-    public ResponseEntity<String> createVille(@RequestBody Ville ville) {
-        boolean result = villeService.insertVille(ville);
-        if (!result) {
-            return ResponseEntity.badRequest().body("Cette ville n'a pas été créée !");
-        } else {
-            return ResponseEntity.ok("La ville a bien été créée !");
-        }
+    public ResponseEntity<String> createVille(@RequestBody Ville ville) throws GestionExceptions {
+        villeService.insertVille(ville);
+        return ResponseEntity.ok("La ville a bien été créée !");
     }
 
     @GetMapping
@@ -181,27 +178,21 @@ public class VilleResource {
     }
 
     @GetMapping("/commencant/{nom}")
-    public ResponseEntity<String> getVilleByNomCommencantPar(@PathVariable("nom") String nom) {
-        List<Ville> result = villeService.getVilleByNomStartingWith(nom);
-        if (result == null) {
-            return ResponseEntity.badRequest().body("Il n'y a aucune ville commençant par " + nom + " !");
-        } else {
-            return ResponseEntity.ok("Succès !");
-        }
+    public ResponseEntity<String> getVilleByNomCommencantPar(@PathVariable("nom") String nom) throws GestionExceptions {
+        villeService.getVilleByNomStartingWith(nom);
+        return ResponseEntity.ok("Succès !");
     }
 
     @GetMapping("/NbHabitant/{nbHabitants}")
-    public ResponseEntity<String> getVilleByNbHabitantPlusGrand(@PathVariable("nbHabitants") int nbHabitants) {
-        List<Ville> result = villeService.getVilleNbHabitantsPlusGrandQue(nbHabitants);
-        if (result == null) {
-            return ResponseEntity.badRequest().body("Il n'y a aucune ville avec un nombre d'habitants plus grand que "+ nbHabitants + " !");
-        } else {
-            return ResponseEntity.ok("Succès !");
-        }
+    public ResponseEntity<String> getVilleByNbHabitantPlusGrand(@PathVariable("nbHabitants") int nbHabitants) throws GestionExceptions {
+        villeService.getVilleNbHabitantsPlusGrandQue(nbHabitants);
+        return ResponseEntity.ok("Succès !");
     }
 
     @GetMapping("/nbHabitantsEntre/{nbHabitantsMin}/{nbHabitantsMax}")
-    public ResponseEntity<String> getVilleByNbHabitantEntre(@PathVariable("nbHabitantsMin") int nbHabitantsMin, @PathVariable("nbHabitantsMax") int nbHabitantsMax) {
+    public ResponseEntity<String> getVilleByNbHabitantEntre(
+            @PathVariable("nbHabitantsMin") int nbHabitantsMin,
+            @PathVariable("nbHabitantsMax") int nbHabitantsMax) throws GestionExceptions {
         List<Ville> result = villeService.getVilleNbHabitantsEntre(nbHabitantsMin, nbHabitantsMax);
         if (result == null) {
             return ResponseEntity.badRequest().body("Il n'y a aucune ville avec un nombre d'habitants entre " + nbHabitantsMin + " et " + nbHabitantsMax + " !");
@@ -211,32 +202,25 @@ public class VilleResource {
     }
 
     @GetMapping("/departementNbHabitantsPlusGrand/{departementCode}/{nbHabitants}")
-    public ResponseEntity<String> getVilleByDepartementEtNbHabitantsPlusGrandQue(@PathVariable("departementCode") String departementCode, @PathVariable("nbHabitants") int nbHabitants) {
-        List<Ville> result = villeService.getVilleByDepartementEtNbHabitantsPlusGrandQue(departementCode, nbHabitants);
-        if (result == null) {
-            return ResponseEntity.badRequest().body("Il n'y a aucune ville dans le département " + departementCode + " avec un nombre d'habitants plus grand que " + nbHabitants + " !");
-        } else {
-            return ResponseEntity.ok("Succès !");
-        }
+    public ResponseEntity<String> getVilleByDepartementEtNbHabitantsPlusGrandQue(
+            @PathVariable("departementCode") String departementCode,
+            @PathVariable("nbHabitants") int nbHabitants) throws GestionExceptions {
+        villeService.getVilleByDepartementEtNbHabitantsPlusGrandQue(departementCode, nbHabitants);
+        return ResponseEntity.ok("Succès !");
     }
 
     @GetMapping("/nbHabitantsDepartementEntre")
-    public ResponseEntity<String> getVilleByDepartementEtNbHabitantsEntre(@PathVariable("departementCode") String departementCode, @PathVariable("nbHabitants") int nbHabitants, @PathVariable("nbHabitants") int nbHabitants1) {
-        List<Ville> result = villeService.getVilleByDepartementEtNbHabitantsEntre(departementCode, nbHabitants, nbHabitants1);
-        if (result == null) {
-            return ResponseEntity.badRequest().body("Il n'y a aucune ville dans le département " + departementCode + " avec un nombre d'habitants entre " + nbHabitants + " et " + nbHabitants1 + " !");
-        } else {
-            return ResponseEntity.ok("Succès !");
-        }
+    public ResponseEntity<String> getVilleByDepartementEtNbHabitantsEntre(
+            @PathVariable("departementCode") String departementCode,
+            @PathVariable("nbHabitants") int nbHabitants,
+            @PathVariable("nbHabitants") int nbHabitants1) throws GestionExceptions {
+        villeService.getVilleByDepartementEtNbHabitantsEntre(departementCode, nbHabitants, nbHabitants1);
+        return ResponseEntity.ok("Succès !");
     }
 
     @GetMapping("/DepartementNbHabitants/{departementCode}/{size}")
-    public ResponseEntity<String> getVilleByDepartementOrderByNbHabitantsDesc(@PathVariable("departementCode") String departementCode, @PathVariable("size") int size) {
-        List<Ville> result = villeService.findVillesByDepartementOrderByNbHabitantsDesc(departementCode, size);
-        if (result == null) {
-            return ResponseEntity.badRequest().body("Il n'y a aucune ville dans le département " + departementCode + " !");
-        } else {
-            return ResponseEntity.ok("Succès !");
-        }
+    public ResponseEntity<String> getVilleByDepartementOrderByNbHabitantsDesc(@PathVariable("departementCode") String departementCode, @PathVariable("size") int size) throws GestionExceptions {
+        villeService.findVillesByDepartementOrderByNbHabitantsDesc(departementCode, size);
+        return ResponseEntity.ok("Succès !");
     }
 }

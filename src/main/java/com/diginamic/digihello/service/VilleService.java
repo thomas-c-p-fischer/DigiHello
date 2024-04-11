@@ -2,6 +2,8 @@ package com.diginamic.digihello.service;
 
 import com.diginamic.digihello.domain.Ville;
 import com.diginamic.digihello.domain.Departement;
+import com.diginamic.digihello.exceptions.GestionExceptions;
+import com.diginamic.digihello.repository.DepartementRepository;
 import com.diginamic.digihello.repository.VilleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -54,10 +56,13 @@ public class VilleService {
         entityManager.remove(ville);
     }*/
 
-    //------------------------------------ TP 7 ------------------------------------------
+    //------------------------------------ TP 7/8/9 ------------------------------------------
 
     @Autowired
     private VilleRepository villeRepository;
+
+    @Autowired
+    private DepartementRepository departementRepository;
 
     @PostConstruct
     public void init() {
@@ -67,14 +72,20 @@ public class VilleService {
     }
 
     @Transactional
-    public boolean insertVille(Ville ville) {
-        Optional<Ville> villeBdd = villeRepository.findByNomAndDepartement(ville.getNom(), ville.getDepartement());
-        if(villeBdd.get() == null) {
-            villeRepository.save(ville);
-            return true;
-        } else {
-            return false;
+    public void insertVille(Ville ville) throws GestionExceptions {
+        if(ville.getNbHabitants() < 6500) {
+            throw new GestionExceptions("Une Ville doit avoir au moins 6500 habitants.");
         }
+        if(ville.getNom().length() < 2) {
+            throw new GestionExceptions("Le nom de la ville doit avoir au moins 2 caractères");
+        }
+        if(ville.getDepartement().getCode().length() < 2 || ville.getDepartement().getCode().length() > 3) {
+            throw new GestionExceptions("Le code département doit être composé de 2 à 3 caractères");
+        }
+        if (ville.getDepartement().getNom().length() < 3) {
+            throw new GestionExceptions("Le nom du département doit contenir au moins 3 lettres");
+        }
+        villeRepository.save(ville);
     }
 
     @Transactional
@@ -131,60 +142,60 @@ public class VilleService {
     }
 
     @Transactional
-    public List<Ville> getVilleByNomStartingWith(String nom) {
+    public List<Ville> getVilleByNomStartingWith(String nom) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByNomStartingWith(nom);
         if (villes.isEmpty()) {
-            return null;
+            throw new GestionExceptions("Aucune ville dont le nom commence par " + nom + " n'a été trouvée");
         } else {
             return villes;
         }
     }
 
     @Transactional
-    public List<Ville> getVilleNbHabitantsPlusGrandQue(int nbHabitantsMin) {
+    public List<Ville> getVilleNbHabitantsPlusGrandQue(int nbHabitantsMin) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByNbHabitantsGreaterThan(nbHabitantsMin);
         if (villes.isEmpty()) {
-            return null;
+            throw new GestionExceptions("Aucune ville n'a une population supérieure à " + nbHabitantsMin);
         } else {
             return villes;
         }
     }
 
     @Transactional
-    public List<Ville> getVilleNbHabitantsEntre(int nbHabitantsMin, int nbHabitantsMax) {
+    public List<Ville> getVilleNbHabitantsEntre(int nbHabitantsMin, int nbHabitantsMax) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByNbHabitantsBetween(nbHabitantsMin, nbHabitantsMax);
         if (villes.isEmpty()) {
-            return null;
+            throw new GestionExceptions("Aucune ville n'a une population comprise entre " + nbHabitantsMin + " et " + nbHabitantsMax);
         } else {
             return villes;
         }
     }
 
     @Transactional
-    public List<Ville> getVilleByDepartementEtNbHabitantsPlusGrandQue(String departementCode, int nbHabitants) {
+    public List<Ville> getVilleByDepartementEtNbHabitantsPlusGrandQue(String departementCode, int nbHabitants) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, nbHabitants);
         if (villes.isEmpty()) {
-            return null;
+            throw new GestionExceptions("Aucune ville n'a une population supérieure à " + nbHabitants + " dans le département " + departementCode);
         } else {
             return villes;
         }
     }
 
     @Transactional
-    public List<Ville> getVilleByDepartementEtNbHabitantsEntre(String departementCode, int nbHabitants, int nbHabitants2) {
+    public List<Ville> getVilleByDepartementEtNbHabitantsEntre(String departementCode, int nbHabitants, int nbHabitants2) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByDepartementCodeAndNbHabitantsBetween(departementCode, nbHabitants, nbHabitants2);
         if (villes.isEmpty()) {
-            return null;
+            throw new GestionExceptions("Aucune ville n'a une population comprise entre " + nbHabitants + " et " + nbHabitants2 + " dans le département " + departementCode);
         } else {
             return villes;
         }
     }
 
     @Transactional
-    public List<Ville> findVillesByDepartementOrderByNbHabitantsDesc(String departementCode, int size) {
+    public List<Ville> findVillesByDepartementOrderByNbHabitantsDesc(String departementCode, int size) throws GestionExceptions {
         List<Ville> villes = villeRepository.findVillesByDepartementCodeOrderByNbHabitantsDesc(departementCode, Pageable.ofSize(size)).getContent();
         if (villes.isEmpty()) {
-            return null;
+            throw new GestionExceptions("Aucune ville n'a été trouvée dans le département " + departementCode);
         } else {
             return villes;
         }

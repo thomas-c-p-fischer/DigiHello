@@ -2,6 +2,7 @@ package com.diginamic.digihello.webRest;
 
 import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
+import com.diginamic.digihello.exceptions.GestionExceptions;
 import com.diginamic.digihello.service.DepartementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,13 +55,9 @@ public class DepartementResource {
     // ------------------------------------------ TP - 8 ------------------------------------------
 
     @PostMapping
-    public ResponseEntity<String> createDepartement(@RequestBody Departement departement) {
-        boolean result = departementService.insertDepartement(departement);
-        if (!result) {
-            return ResponseEntity.badRequest().body("Ce département n'a pas été créée !");
-        } else {
-            return ResponseEntity.ok("Le département a bien été créée !");
-        }
+    public ResponseEntity<String> createDepartement(@RequestBody Departement departement) throws GestionExceptions {
+        departementService.insertDepartement(departement);
+        return ResponseEntity.ok("Le département a bien été créée !");
     }
 
     @GetMapping
