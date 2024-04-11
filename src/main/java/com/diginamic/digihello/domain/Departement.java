@@ -16,15 +16,17 @@ public class Departement {
 
     private String nom;
 
+    private String code;
+
     @OneToMany(mappedBy = "departement")
     private List<Ville> villes;
 
     public Departement() {
     }
 
-    public Departement(String nom, List<Ville> villes) {
+    public Departement(String nom, String code) {
         this.nom = nom;
-        this.villes = villes;
+        this.code = code;
     }
 
     public void setId(Long id) {
@@ -41,6 +43,14 @@ public class Departement {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public List<Ville> getVilles() {

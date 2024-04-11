@@ -1,9 +1,9 @@
 package com.diginamic.digihello.webRest;
 
+import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
 import com.diginamic.digihello.service.VilleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/villes")
 public class VilleResource {
 
-    // ----------------------------------------------- TP sans BDD -----------------------------------------------
+    // ----------------------------------------------- TP 1 - 5 -----------------------------------------------
     /*ArrayList<Ville> villes = new ArrayList<Ville>();
 
     @PostMapping
@@ -68,10 +68,11 @@ public class VilleResource {
         return new ArrayList<>(villes);
     }*/
 
-    // ----------------------------------------------- TP avec BDD -----------------------------------------------
+    // ----------------------------------------------- TP 06 -----------------------------------------------
     @Autowired
     private VilleService villeService;
 
+    /*
     @GetMapping
     public ResponseEntity<String> getVilles() {
         villeService.extractVilles();
@@ -115,6 +116,127 @@ public class VilleResource {
             return ResponseEntity.ok("Succès !");
         } else {
             return ResponseEntity.badRequest().body("Cette ville n'existe pas !");
+        }
+    }*/
+
+    //-------------------------------- TP - 7 --------------------------------
+
+    @PostMapping
+    public ResponseEntity<String> createVille(@RequestBody Ville ville) {
+        boolean result = villeService.insertVille(ville);
+        if (!result) {
+            return ResponseEntity.badRequest().body("Cette ville n'a pas été créée !");
+        } else {
+            return ResponseEntity.ok("La ville a bien été créée !");
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<String> getVilles() {
+        List<Ville> result = villeService.getAllVilles();
+        if (result.isEmpty()) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville !");
+        }
+        return ResponseEntity.ok("Succès !");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getVilleById(@PathVariable("id") Long id) {
+        Ville result = villeService.getVilleById(id);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville avec cette id !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @GetMapping("/nom/{nom}")
+    public ResponseEntity<String> getVilleByNom(@PathVariable("nom") String nom) {
+        Ville result = villeService.getVilleByNom(nom);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville avec ce nom !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateVille(@RequestBody Ville ville) {
+        boolean villeModifiee = villeService.updateVille(ville);
+        if(villeModifiee) {
+            return ResponseEntity.ok("Succès !");
+        } else {
+            return ResponseEntity.badRequest().body("Cette ville n'existe pas !");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteVilleById(@PathVariable("id") Long id) {
+        boolean villesupprimee = villeService.supprimerVille(id);
+        if(villesupprimee) {
+            return ResponseEntity.ok("Succès !");
+        } else {
+            return ResponseEntity.badRequest().body("Cette ville n'existe pas !");
+        }
+    }
+
+    @GetMapping("/commencant/{nom}")
+    public ResponseEntity<String> getVilleByNomCommencantPar(@PathVariable("nom") String nom) {
+        List<Ville> result = villeService.getVilleByNomStartingWith(nom);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville commençant par " + nom + " !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @GetMapping("/NbHabitant/{nbHabitants}")
+    public ResponseEntity<String> getVilleByNbHabitantPlusGrand(@PathVariable("nbHabitants") int nbHabitants) {
+        List<Ville> result = villeService.getVilleNbHabitantsPlusGrandQue(nbHabitants);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville avec un nombre d'habitants plus grand que "+ nbHabitants + " !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @GetMapping("/nbHabitantsEntre/{nbHabitantsMin}/{nbHabitantsMax}")
+    public ResponseEntity<String> getVilleByNbHabitantEntre(@PathVariable("nbHabitantsMin") int nbHabitantsMin, @PathVariable("nbHabitantsMax") int nbHabitantsMax) {
+        List<Ville> result = villeService.getVilleNbHabitantsEntre(nbHabitantsMin, nbHabitantsMax);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville avec un nombre d'habitants entre " + nbHabitantsMin + " et " + nbHabitantsMax + " !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @GetMapping("/departementNbHabitantsPlusGrand/{departementCode}/{nbHabitants}")
+    public ResponseEntity<String> getVilleByDepartementEtNbHabitantsPlusGrandQue(@PathVariable("departementCode") String departementCode, @PathVariable("nbHabitants") int nbHabitants) {
+        List<Ville> result = villeService.getVilleByDepartementEtNbHabitantsPlusGrandQue(departementCode, nbHabitants);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville dans le département " + departementCode + " avec un nombre d'habitants plus grand que " + nbHabitants + " !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @GetMapping("/nbHabitantsDepartementEntre")
+    public ResponseEntity<String> getVilleByDepartementEtNbHabitantsEntre(@PathVariable("departementCode") String departementCode, @PathVariable("nbHabitants") int nbHabitants, @PathVariable("nbHabitants") int nbHabitants1) {
+        List<Ville> result = villeService.getVilleByDepartementEtNbHabitantsEntre(departementCode, nbHabitants, nbHabitants1);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville dans le département " + departementCode + " avec un nombre d'habitants entre " + nbHabitants + " et " + nbHabitants1 + " !");
+        } else {
+            return ResponseEntity.ok("Succès !");
+        }
+    }
+
+    @GetMapping("/DepartementNbHabitants/{departementCode}/{size}")
+    public ResponseEntity<String> getVilleByDepartementOrderByNbHabitantsDesc(@PathVariable("departementCode") String departementCode, @PathVariable("size") int size) {
+        List<Ville> result = villeService.findVillesByDepartementOrderByNbHabitantsDesc(departementCode, size);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("Il n'y a aucune ville dans le département " + departementCode + " !");
+        } else {
+            return ResponseEntity.ok("Succès !");
         }
     }
 }

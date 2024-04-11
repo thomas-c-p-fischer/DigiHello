@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/departements")
 public class DepartementResource {
 
-    @Autowired
+    /*@Autowired
     private DepartementService departementService;
 
     @GetMapping
@@ -40,8 +40,6 @@ public class DepartementResource {
         departementService.deleteDepartement(id);
     }
 
-    // Custom Operations
-
     @GetMapping("/{id}/topCities")
     public List<Ville> getTopNCitiesOfDepartement(@PathVariable Long id, @RequestParam int n) {
         return departementService.getTopNCitiesOfDepartement(id, n);
@@ -50,5 +48,5 @@ public class DepartementResource {
     @GetMapping("/{id}/citiesInPopulationRange")
     public List<Ville> getCitiesInPopulationRangeOfDepartement(@PathVariable Long id, @RequestParam int minPopulation, @RequestParam int maxPopulation) {
         return departementService.getCitiesInPopulationRangeOfDepartement(id, minPopulation, maxPopulation);
-    }
+    }*/
 }

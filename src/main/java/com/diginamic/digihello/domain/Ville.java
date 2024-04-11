@@ -13,7 +13,7 @@ public class Ville {
     private String nom;
     private int nbHabitants;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "departement_id")
     private Departement departement;
 

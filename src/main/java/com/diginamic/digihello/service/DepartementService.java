@@ -10,7 +10,8 @@ import java.util.List;
 @Service
 public class DepartementService {
 
-    @PersistenceContext
+    // ------------------------------------------ TP - 6 ------------------------------------------
+    /*@PersistenceContext
     private EntityManager entityManager;
 
     @Transactional
@@ -63,5 +64,5 @@ public class DepartementService {
                 .setParameter("minPopulation", minPopulation)
                 .setParameter("maxPopulation", maxPopulation)
                 .getResultList();
-    }
+    }*/
 }
