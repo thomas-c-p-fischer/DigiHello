@@ -244,5 +244,7 @@ public class VilleResource {
                     ville.getDepartement().getCode() + "," +
                     ville.getDepartement().getNom());
         }
+        writer.flush();
+        writer.close();
     }
 }

@@ -82,6 +82,16 @@ public class VilleService {
         if (ville.getDepartement().getNom().length() < 3) {
             throw new GestionExceptions("Le nom du département doit contenir au moins 3 lettres");
         }
+        Iterable<Ville> villesIterable = villeRepository.findAll();
+        List<Ville> villes = new ArrayList<>();
+        villesIterable.forEach(villes::add);
+        for(Ville v : villes) {
+            if(v.getNom().equals(ville.getNom()) &&
+                    v.getDepartement().getCode().equals(ville.getDepartement().getCode()) &&
+                    v.getDepartement().getNom().equals(ville.getDepartement().getNom())) {
+                throw  new GestionExceptions("Cette ville existe déjà.");
+            }
+        }
         villeRepository.save(ville);
     }
 
