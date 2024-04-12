@@ -5,10 +5,13 @@ import com.diginamic.digihello.exceptions.GestionExceptions;
 import com.diginamic.digihello.service.VilleService;
 import com.diginamic.digihello.service.dto.VilleDto;
 import com.diginamic.digihello.service.mapper.VilleMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @RestController
@@ -226,5 +229,20 @@ public class VilleResource {
     public ResponseEntity<String> getVilleByDepartementOrderByNbHabitantsDesc(@PathVariable("departementCode") String departementCode, @PathVariable("size") int size) throws GestionExceptions {
         villeService.findVillesByDepartementOrderByNbHabitantsDesc(departementCode, size);
         return ResponseEntity.ok("Succès !");
+    }
+
+    @GetMapping("/export")
+    public void getFichierVille(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"villes.csv\"");
+        List<Ville> villes = villeService.getAllVilles();
+        PrintWriter writer = response.getWriter();
+        writer.println("Nom de la ville,Nombre d'habitants,Code département,Nom du département");
+        for (Ville ville : villes) {
+            writer.println(ville.getNom() + "," +
+                    ville.getNbHabitants() + "," +
+                    ville.getDepartement().getCode() + "," +
+                    ville.getDepartement().getNom());
+        }
     }
 }

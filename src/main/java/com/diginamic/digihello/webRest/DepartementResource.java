@@ -4,10 +4,13 @@ import com.diginamic.digihello.domain.Departement;
 import com.diginamic.digihello.domain.Ville;
 import com.diginamic.digihello.exceptions.GestionExceptions;
 import com.diginamic.digihello.service.DepartementService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @RestController
@@ -86,6 +89,19 @@ public class DepartementResource {
             return ResponseEntity.ok("Succès !");
         } else {
             return ResponseEntity.badRequest().body("Ce département n'existe pas !");
+        }
+    }
+
+    @GetMapping("/export")
+    public void getFichierDepartements(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"departements.csv\"");
+        List<Departement> departements = departementService.getAllDepartements();
+        PrintWriter writer = response.getWriter();
+        writer.println("Code département,Nom du département");
+        for (Departement departement : departements) {
+            writer.println(departement.getCode() + "," +
+                    departement.getNom());
         }
     }
 }
