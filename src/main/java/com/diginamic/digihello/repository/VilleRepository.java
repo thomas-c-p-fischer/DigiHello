@@ -18,13 +18,13 @@ public interface VilleRepository extends CrudRepository<Ville, Long> {
 
     List<Ville> findByNomStartingWith(String nom);
 
-    List<Ville> findByNbHabitantsGreaterThan(int nbHabitantsMin);
+    /*List<Ville> findByNbHabitantsGreaterThan(int nbHabitantsMin);
 
     List<Ville> findByNbHabitantsBetween(int nbHabitantsMin, int nbHabitantsMax);
 
     List<Ville> findByDepartementCodeAndNbHabitantsGreaterThan(String departementCode, int nbHabitants);
 
-    List<Ville> findByDepartementCodeAndNbHabitantsBetween(String departementCode, int nbHabitants, int nbHabitants2);
+    List<Ville> findByDepartementCodeAndNbHabitantsBetween(String departementCode, int nbHabitants, int nbHabitants2);*/
 
-    Page<Ville> findVillesByDepartementCodeOrderByNbHabitantsDesc(String departementCode, Pageable pageable);
+   /* Page<Ville> findVillesByDepartementCodeOrderByNbHabitantsDesc(String departementCode, Pageable pageable);*/
 }

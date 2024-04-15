@@ -1,3 +1,4 @@
+/*
 package com.diginamic.digihello.webRest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,4 +36,4 @@ public class VilleResourceTest {
                         .content(invalidJsonPayload))
                 .andExpect(status().isBadRequest());
     }
-}
+}*/

@@ -61,18 +61,23 @@ public class VilleService {
     @Autowired
     private VilleRepository villeRepository;
 
-    @PostConstruct
+    /*@PostConstruct
     public void init() {
         villeRepository.save(new Ville("Paris",2133111, new Departement("Paris","75")));
         villeRepository.save(new Ville("Marseille", 873076, new Departement("Bouches-du-Rhône", "13")));
         villeRepository.save(new Ville("Lyon", 522250, new Departement("Rhône","69")));
+    }*/
+
+    @Transactional
+    public void insertVilleCsv(Ville ville){
+        villeRepository.save(ville);
     }
 
     @Transactional
     public void insertVille(Ville ville) throws GestionExceptions {
-        if(ville.getNbHabitants() < 6500) {
+        /*if(ville.getNbHabitants() < 6500) {
             throw new GestionExceptions("Une Ville doit avoir au moins 6500 habitants.");
-        }
+        }*/
         if(ville.getNom().length() < 2) {
             throw new GestionExceptions("Le nom de la ville doit avoir au moins 2 caractères");
         }
@@ -158,7 +163,7 @@ public class VilleService {
         }
     }
 
-    @Transactional
+    /*@Transactional
     public List<Ville> getVilleNbHabitantsPlusGrandQue(int nbHabitantsMin) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByNbHabitantsGreaterThan(nbHabitantsMin);
         if (villes.isEmpty()) {
@@ -166,9 +171,9 @@ public class VilleService {
         } else {
             return villes;
         }
-    }
+    }*/
 
-    @Transactional
+   /* @Transactional
     public List<Ville> getVilleNbHabitantsEntre(int nbHabitantsMin, int nbHabitantsMax) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByNbHabitantsBetween(nbHabitantsMin, nbHabitantsMax);
         if (villes.isEmpty()) {
@@ -176,9 +181,9 @@ public class VilleService {
         } else {
             return villes;
         }
-    }
+    }*/
 
-    @Transactional
+    /*@Transactional
     public List<Ville> getVilleByDepartementEtNbHabitantsPlusGrandQue(String departementCode, int nbHabitants) throws GestionExceptions {
         List<Ville> villes = villeRepository.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, nbHabitants);
         if (villes.isEmpty()) {
@@ -206,5 +211,5 @@ public class VilleService {
         } else {
             return villes;
         }
-    }
+    }*/
 }

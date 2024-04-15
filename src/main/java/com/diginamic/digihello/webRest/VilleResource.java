@@ -190,7 +190,7 @@ public class VilleResource {
         return ResponseEntity.ok("Succès !");
     }
 
-    @GetMapping("/NbHabitant/{nbHabitants}")
+    /*@GetMapping("/NbHabitant/{nbHabitants}")
     public ResponseEntity<String> getVilleByNbHabitantPlusGrand(@PathVariable("nbHabitants") int nbHabitants) throws GestionExceptions {
         villeService.getVilleNbHabitantsPlusGrandQue(nbHabitants);
         return ResponseEntity.ok("Succès !");
@@ -246,5 +246,5 @@ public class VilleResource {
         }
         writer.flush();
         writer.close();
-    }
+    }*/
 }

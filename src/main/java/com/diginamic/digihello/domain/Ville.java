@@ -11,15 +11,15 @@ public class Ville {
     private Long id;
 
     private String nom;
-    private int nbHabitants;
+    /*private int nbHabitants;*/
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "departement_id")
     private Departement departement;
 
-    public Ville(String nom, int nbHabitants, Departement departement) {
+    public Ville(String nom/*, int nbHabitants*/, Departement departement) {
         this.nom = nom;
-        this.nbHabitants = nbHabitants;
+        /*this.nbHabitants = nbHabitants;*/
         this.departement = departement;
     }
 
@@ -44,14 +44,14 @@ public class Ville {
         this.nom = nom;
     }
 
-    @JsonProperty("nbHabitants")
+    /*@JsonProperty("nbHabitants")
     public int getNbHabitants() {
         return nbHabitants;
     }
 
     public void setNbHabitants(int nbHabitants) {
         this.nbHabitants = nbHabitants;
-    }
+    }*/
 
     public Departement getDepartement() {
         return departement;
