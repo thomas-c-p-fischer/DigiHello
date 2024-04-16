@@ -79,16 +79,21 @@ public class DepartementService {
 
     @Transactional
     public void insertDepartement(Departement departement) throws GestionExceptions {
-        Optional<Departement> departementBdd = departementRepository.findByCode(departement.getCode());
+        Departement departementBdd = departementRepository.findByCode(departement.getCode());
         if (departement.getCode().length() < 2 || departement.getCode().length() > 3) {
             throw new GestionExceptions("Le code département doit être composé de 2 à 3 caractères");
         }
         if (departement.getNom().length() < 3) {
             throw new GestionExceptions("Le nom du département doit contenir au moins 3 lettres");
         }
-        if(!departementBdd.isPresent()) {
+        if(departementBdd == null) {
             departementRepository.save(departement);
         }
+    }
+
+    @Transactional
+    public void insertDepartementCsv(Departement departement) {
+        departementRepository.save(departement);
     }
 
     @Transactional
@@ -105,9 +110,19 @@ public class DepartementService {
 
     @Transactional
     public Departement getDepartementByCode(String code) {
-        Optional<Departement> departement = departementRepository.findByCode(code);
+        Departement departement = departementRepository.findByCode(code);
         if(departement != null) {
-            return departement.get();
+            return departement;
+        } else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public Departement getDepartementByNom(String nom, String code) {
+        Departement departement = departementRepository.findByNomAndCode(nom, code);
+        if(departement != null) {
+            return departement;
         } else {
             return null;
         }
@@ -115,8 +130,8 @@ public class DepartementService {
 
     @Transactional
     public boolean updateDepartement(Departement departement) {
-        Optional<Departement> departementUpdate = departementRepository.findByCode(departement.getCode());
-        if (departementUpdate.get() != null) {
+        Departement departementUpdate = departementRepository.findByCode(departement.getCode());
+        if (departementUpdate != null) {
             departementRepository.save(departement);
             return true;
         }
@@ -125,9 +140,9 @@ public class DepartementService {
 
     @Transactional
     public boolean supprimerDepartement(String code) {
-        Optional<Departement> departementDelete = departementRepository.findByCode(code);
-        if (departementDelete.isPresent()) {
-            departementRepository.delete(departementDelete.get());
+        Departement departementDelete = departementRepository.findByCode(code);
+        if (departementDelete != null) {
+            departementRepository.delete(departementDelete);
             return true;
         } else {
             return false;

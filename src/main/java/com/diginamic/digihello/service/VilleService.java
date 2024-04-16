@@ -61,6 +61,9 @@ public class VilleService {
     @Autowired
     private VilleRepository villeRepository;
 
+    @Autowired
+    private DepartementRepository departementRepository;
+
     /*@PostConstruct
     public void init() {
         villeRepository.save(new Ville("Paris",2133111, new Departement("Paris","75")));
@@ -69,8 +72,16 @@ public class VilleService {
     }*/
 
     @Transactional
-    public void insertVilleCsv(Ville ville){
-        villeRepository.save(ville);
+    public void insertVilleCsv(Ville ville) {
+        if (ville != null) {
+            Departement departement = departementRepository.findByCode(ville.getDepartement().getCode());
+            if (departement == null) {
+                departement = departementRepository.save(ville.getDepartement());
+            } else {
+                ville.setDepartement(departement);
+            }
+            villeRepository.save(ville);
+        }
     }
 
     @Transactional

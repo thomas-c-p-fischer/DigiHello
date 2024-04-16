@@ -1,9 +1,6 @@
 package com.diginamic.digihello.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -13,9 +10,10 @@ public class Departement {
     @Id
     @GeneratedValue
     private Long id;
-
+    
     private String nom;
 
+    @Column(unique = true)
     private String code;
 
     @OneToMany(mappedBy = "departement")
