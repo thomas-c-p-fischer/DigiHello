@@ -10,7 +10,7 @@ public class Departement {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     private String nom;
 
     @Column(unique = true)

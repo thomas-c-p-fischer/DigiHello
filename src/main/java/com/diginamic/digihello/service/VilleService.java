@@ -116,11 +116,7 @@ public class VilleService {
         Iterable<Ville> villesIterable = villeRepository.findAll();
         List<Ville> villes = new ArrayList<>();
         villesIterable.forEach(villes::add);
-        if(villes.isEmpty()) {
-            return null;
-        } else {
-            return villes;
-        }
+        return villes;
     }
 
     @Transactional
