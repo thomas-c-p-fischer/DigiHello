@@ -1,3 +1,4 @@
+/*
 package com.diginamic.digihello;
 
 import com.diginamic.digihello.domain.Departement;
@@ -70,3 +71,4 @@ public class Recensement implements CommandLineRunner {
 
     }
 }
+*/

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler {
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({ GestionExceptions.class })
     protected ResponseEntity<String> errorTreatment(GestionExceptions exception) {
         return ResponseEntity.badRequest().body(exception.getMessage());
     }
