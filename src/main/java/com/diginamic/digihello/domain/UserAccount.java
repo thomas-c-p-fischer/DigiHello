@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 public class UserAccount {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -69,8 +68,7 @@ public class UserAccount {
     }
 
     public UserDetails asUser() {
-         return User.withDefaultPasswordEncoder()
-                 .username(getUsername())
+         return User.withUsername(getUsername())
                  .password(getPassword())
                  .authorities(getAuthorities()).build();
     }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Index Page</title>
+</head>
+
+<body>
+<h1>Welcome to the City Manager</h1>
+<div th:if="${username}">
+    <h2>Welcome <span th:text="${username} + ' (' + ${roles} + ')'">User (Role)</span>!</h2>
+</div>
+<div th:unless="${username}">
+    <h2>Welcome Guest!</h2>
+</div>
+
+<a th:href="@{/listeVilles}">List Cities</a>
+</body>
+
+</html>
